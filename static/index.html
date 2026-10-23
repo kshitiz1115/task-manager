@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple, friendly place to plan and manage your school tasks.">
+  <title>StudySpace | Student Task Manager</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/script.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="StudySpace home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>StudySpace</span>
+      </a>
+      <div class="student-indicator" id="student-indicator" hidden>
+        <span class="student-avatar" id="student-avatar" aria-hidden="true"></span>
+        <span class="student-name" id="student-name"></span>
+        <span class="student-role">Student</span>
+        <button class="button button-quiet logout-button" id="logout-button" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="auth-panel" id="auth-panel" aria-labelledby="auth-heading">
+        <p class="eyebrow">YOUR PERSONAL STUDY PLANNER</p>
+        <h1 id="auth-heading">A calmer way to <span>get things done.</span></h1>
+        <p class="auth-copy">Create an account or sign in to keep your study tasks safely in one place.</p>
+        <div class="auth-tabs" role="group" aria-label="Account options">
+          <button class="auth-tab active" id="show-login" type="button" aria-pressed="true">Sign in</button>
+          <button class="auth-tab" id="show-register" type="button" aria-pressed="false">Create account</button>
+        </div>
+        <form id="auth-form">
+          <div class="form-field" id="name-field" hidden>
+            <label for="auth-name">Your name</label>
+            <input id="auth-name" name="name" type="text" autocomplete="name" maxlength="80">
+          </div>
+          <div class="form-field">
+            <label for="auth-email">Email address</label>
+            <input id="auth-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+          </div>
+          <div class="form-field">
+            <label for="auth-password">Password</label>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required>
+            <span class="field-hint" id="password-hint">Use at least 8 characters.</span>
+          </div>
+          <button class="button button-primary auth-submit" id="auth-submit" type="submit">Sign in</button>
+        </form>
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <div id="app-view" hidden>
+      <section class="welcome-section" aria-labelledby="welcome-title">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL STUDY PLANNER</p>
+          <h1 id="welcome-title">Make room for <span>what matters.</span></h1>
+          <p class="welcome-copy">Keep track of your assignments, stay focused, and take things one task at a time.</p>
+        </div>
+        <div class="welcome-decoration" aria-hidden="true">
+          <span class="sun">✦</span>
+          <span class="decoration-note">A little progress<br>goes a long way.</span>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Task manager">
+        <section class="task-form-panel" aria-labelledby="form-heading">
+          <div class="panel-heading">
+            <div class="heading-icon" aria-hidden="true">✎</div>
+            <div>
+              <p class="eyebrow">GET IT OUT OF YOUR HEAD</p>
+              <h2 id="form-heading">Add a task</h2>
+            </div>
+          </div>
+
+          <form id="task-form">
+            <div class="form-field">
+              <label for="task-title">Task title <span aria-hidden="true">*</span></label>
+              <input id="task-title" name="title" type="text" maxlength="100" placeholder="e.g. Read chapter 4" required>
+            </div>
+
+            <div class="form-field">
+              <label for="task-description">Description <span class="optional-label">(optional)</span></label>
+              <textarea id="task-description" name="description" rows="4" maxlength="500" placeholder="Add a few details to help you get started..."></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="task-priority">Priority</label>
+                <select id="task-priority" name="priority">
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="task-due-date">Due date</label>
+                <input id="task-due-date" name="dueDate" type="date">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="button button-primary" id="submit-button" type="submit">
+                <span aria-hidden="true">＋</span> Add task
+              </button>
+              <button class="button button-quiet" id="cancel-edit-button" type="button" hidden>Cancel</button>
+            </div>
+          </form>
+          <p class="form-hint"><span aria-hidden="true">✦</span> You’ve got this. Start with one small step.</p>
+        </section>
+
+        <section class="task-list-panel" aria-labelledby="tasks-heading">
+          <div class="list-heading">
+            <div>
+              <p class="eyebrow">YOUR PLAN, AT A GLANCE</p>
+              <h2 id="tasks-heading">My tasks <span class="task-count" id="task-count">0</span></h2>
+            </div>
+            <span class="list-sparkle" aria-hidden="true">✳</span>
+          </div>
+
+          <section class="focus-timer" aria-labelledby="focus-heading">
+            <div class="focus-timer-copy">
+              <p class="eyebrow">A LITTLE FOCUS GOES A LONG WAY</p>
+              <h3 id="focus-heading">Focus sprint</h3>
+              <p id="timer-mode-label">25 minutes of focus</p>
+            </div>
+            <div class="focus-timer-controls">
+              <div class="timer-mode-buttons" role="group" aria-label="Timer mode">
+                <button class="timer-mode-button active" id="focus-mode-button" type="button" aria-pressed="true">Focus</button>
+                <button class="timer-mode-button" id="break-mode-button" type="button" aria-pressed="false">Break</button>
+              </div>
+              <div class="timer-clock-row">
+                <span class="timer-clock" id="timer-clock" aria-label="25 minutes remaining">25:00</span>
+                <button class="button button-primary timer-start-button" id="timer-start-button" type="button">Start</button>
+                <button class="button button-quiet timer-reset-button" id="timer-reset-button" type="button">Reset</button>
+              </div>
+            </div>
+          </section>
+          <p class="visually-hidden" id="timer-status" role="status" aria-live="polite"></p>
+
+          <section class="task-filters" id="task-filters" aria-label="Search and filter tasks" hidden>
+            <div class="task-search-field">
+              <label for="task-search">Find a task</label>
+              <input id="task-search" type="search" placeholder="Search titles and descriptions">
+            </div>
+            <div class="task-filter-fields">
+              <div class="task-search-field">
+                <label for="priority-filter">Priority</label>
+                <select id="priority-filter">
+                  <option value="all">All priorities</option>
+                  <option value="high">High priority</option>
+                  <option value="medium">Medium priority</option>
+                  <option value="low">Low priority</option>
+                </select>
+              </div>
+              <div class="task-search-field">
+                <label for="due-date-filter">Due date</label>
+                <select id="due-date-filter">
+                  <option value="all">Any due date</option>
+                  <option value="today">Due today</option>
+                  <option value="upcoming">Upcoming</option>
+                  <option value="overdue">Overdue</option>
+                  <option value="none">No due date</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-summary-row">
+              <p class="filter-result-count" id="filter-result-count" aria-live="polite"></p>
+              <button class="clear-filters-button" id="clear-filters-button" type="button" hidden>Clear filters</button>
+            </div>
+          </section>
+
+          <p class="visually-hidden" id="task-status" role="status" aria-live="polite"></p>
+          <ul class="task-list" id="task-list" aria-label="Tasks">
+            <!-- Task cards are added here by the client script. -->
+          </ul>
+          <div class="empty-state" id="empty-state">
+            <div class="empty-illustration" aria-hidden="true">
+              <span class="empty-sun">☼</span>
+              <span class="empty-page">☷</span>
+            </div>
+            <h3>A fresh page</h3>
+            <p>No tasks just yet. Add your first task and make a plan that feels good.</p>
+          </div>
+          <div class="filter-empty-state" id="filter-empty-state" hidden>
+            <span class="filter-empty-icon" aria-hidden="true">⌕</span>
+            <h3>No matching tasks</h3>
+            <p>Try a different search or adjust the filters above to see the rest of your plan.</p>
+          </div>
+          <p class="list-footer" id="list-footer" hidden><span aria-hidden="true">♡</span> One thing at a time. You’re doing great.</p>
+        </section>
+      </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>Made for calmer study days</span>
+      <span aria-hidden="true">✦</span>
+    </footer>
+  </div>
+</body>
+</html>
